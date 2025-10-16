@@ -18,6 +18,7 @@ const sshConfig = {
       id: '',
       envLang: defaultEnvLang,
       enableSftp: true,
+      forwardAgent: false,
       sshTunnels: [],
       connectionHoppings: [],
       serverHostKey: [],

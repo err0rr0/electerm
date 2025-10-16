@@ -433,6 +433,39 @@ class TerminalSshBase extends TerminalBase {
           .then(finish)
           .catch(reject)
       })
+      
+      // Handle SSH agent forwarding requests
+      if (initOptions.forwardAgent === true) {
+        conn.on('auth-agent', (accept, reject) => {
+          log.log('SSH agent forwarding request from server')
+          if (connectOptions.agent) {
+            const stream = accept()
+            log.log('SSH agent forwarding stream accepted')
+            
+            // Connect to local SSH agent
+            const agentSocket = net.createConnection(connectOptions.agent)
+            
+            agentSocket.on('connect', () => {
+              log.log('Connected to local SSH agent')
+              stream.pipe(agentSocket).pipe(stream)
+            })
+            
+            agentSocket.on('error', (err) => {
+              log.error('SSH agent socket error:', err)
+              stream.end()
+            })
+            
+            stream.on('close', () => {
+              log.log('SSH agent forwarding stream closed')
+              agentSocket.end()
+            })
+          } else {
+            log.warn('SSH agent forwarding requested but no agent available')
+            reject()
+          }
+        })
+      }
+      
       if (!skipX11) {
         conn.on('x11', (inf, accept) => {
           let start = 0
@@ -501,11 +534,9 @@ class TerminalSshBase extends TerminalBase {
 
   buildConnectOptions () {
     const { initOptions } = this
+    const baseOptions = this.getShareOptions()
     const connectOptions = Object.assign(
-      this.getShareOptions(),
-      {
-        agent: process.env.SSH_AUTH_SOCK
-      },
+      baseOptions,
       _.pick(initOptions, [
         'host',
         'port',
@@ -515,6 +546,29 @@ class TerminalSshBase extends TerminalBase {
         'passphrase'
       ])
     )
+    
+    // Configure SSH agent - support both Unix and Windows
+    const sshAuthSock = process.env.SSH_AUTH_SOCK
+    const isWindows = process.platform === 'win32'
+    
+    if (sshAuthSock) {
+      connectOptions.agent = sshAuthSock
+      log.log('SSH agent found at:', sshAuthSock)
+    } else if (isWindows) {
+      // On Windows, try to use the default OpenSSH agent pipe
+      const windowsAgentPipe = '\\\\.\\pipe\\openssh-ssh-agent'
+      try {
+        const fs = require('fs')
+        // Check if the Windows SSH agent pipe exists
+        connectOptions.agent = windowsAgentPipe
+        log.log('Windows SSH agent configured at:', windowsAgentPipe)
+      } catch (e) {
+        log.log('Windows SSH agent not available:', e.message)
+      }
+    } else {
+      log.log('SSH_AUTH_SOCK not found in environment')
+    }
+    
     if (initOptions.debug) {
       connectOptions.debug = log.log
     }
@@ -524,6 +578,25 @@ class TerminalSshBase extends TerminalBase {
     if (!connectOptions.passphrase) {
       delete connectOptions.passphrase
     }
+    
+    // Enable SSH agent forwarding if configured and agent is available
+    if (initOptions.forwardAgent === true) {
+      log.log('SSH agent forwarding requested by user')
+      if (sshAuthSock || (isWindows && connectOptions.agent)) {
+        connectOptions.agentForward = true
+        log.log('SSH agent forwarding enabled, platform:', process.platform)
+        if (sshAuthSock) {
+          log.log('Using SSH_AUTH_SOCK:', sshAuthSock)
+        } else if (isWindows) {
+          log.log('Using Windows SSH agent')
+        }
+      } else {
+        log.warn('SSH agent forwarding requested but no SSH agent found')
+      }
+    } else {
+      log.log('SSH agent forwarding not requested (forwardAgent =', initOptions.forwardAgent, ')')
+    }
+    
     return connectOptions
   }
 
@@ -538,6 +611,13 @@ class TerminalSshBase extends TerminalBase {
     const shellOpts = {
       x11
     }
+    
+    // Enable SSH agent forwarding in shell if configured
+    if (initOptions.forwardAgent === true) {
+      shellOpts.agentForward = true
+      log.log('SSH agent forwarding enabled in shell options')
+    }
+    
     shellOpts.env = this.getEnv(initOptions)
     return shellOpts
   }
