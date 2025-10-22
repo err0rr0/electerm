@@ -44,35 +44,8 @@ export default function Sidebar (props) {
 
   const { store } = window
 
-  const handleClickOutside = (event) => {
-    // Don't close if pinned or has active input
-    if (store.pinned || hasActiveInput()) {
-      return
-    }
-
-    // Check if click is outside the sidebar panel
-    const sidebarPanel = document.querySelector('.sidebar-panel')
-    if (sidebarPanel && !sidebarPanel.contains(event.target)) {
-      store.setOpenedSideBar('')
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }
-
   const handleClickBookmark = () => {
-    if (pinned) {
-      return
-    }
-    if (openedSideBar === 'bookmarks') {
-      // Remove listener when closing
-      document.removeEventListener('click', handleClickOutside)
-      store.setOpenedSideBar('')
-    } else {
-      // Add listener when opening, with slight delay to avoid conflict with this click
-      setTimeout(() => {
-        document.addEventListener('click', handleClickOutside)
-      }, 0)
-      store.setOpenedSideBar('bookmarks')
-    }
+    // 书签面板现在常驻显示，这个函数可以用于其他用途或保持为空
   }
 
   const handleShowUpgrade = () => {
@@ -100,18 +73,15 @@ export default function Sidebar (props) {
   const syncActive = showSetting && settingTab === settingMap.setting && settingItem.id === 'setting-sync'
   const themeActive = showSetting && settingTab === settingMap.terminalThemes
   const bookmarksActive = showSetting && settingTab === settingMap.bookmarks
-  const sideProps = openedSideBar
-    ? {
-        className: 'sidebar-list',
-        style: {
-          width: `${leftSidebarWidth}px`
-        }
-      }
-    : {
-        className: 'sidebar-list'
-      }
+  // 书签面板始终显示，不依赖openedSideBar状态
+  const sideProps = {
+    className: 'sidebar-list sidebar-list-always-visible',
+    style: {
+      width: `${leftSidebarWidth}px`
+    }
+  }
   const sidebarProps = {
-    className: `sidebar type-${openedSideBar}`,
+    className: `sidebar type-bookmarks-always`,
     style: {
       width: sidebarWidth,
       height

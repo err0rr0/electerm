@@ -145,8 +145,7 @@ export default function QuickCommandsFooterBox (props) {
     pinnedQuickCommandBar,
     qmSortByFrequency,
     inActiveTerminal,
-    leftSidebarWidth,
-    openedSideBar
+    leftSidebarWidth
   } = props
   if ((!openQuickCommandBar && !pinnedQuickCommandBar) || !inActiveTerminal) {
     return null
@@ -183,7 +182,8 @@ export default function QuickCommandsFooterBox (props) {
     { 'fil-keyword': !!keyword }
   )
   const type = qmSortByFrequency ? 'primary' : 'default'
-  const w = openedSideBar ? 43 + leftSidebarWidth : 43
+  // 书签面板常驻显示，始终考虑侧边栏宽度
+  const w = 43 + leftSidebarWidth
   const qmProps = {
     className: 'qm-wrap-tooltip',
     style: {

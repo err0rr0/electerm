@@ -43,7 +43,8 @@ export default auto(function Layout (props) {
       inActiveTerminal
     } = props.store
     const h = height - footerHeight - (inActiveTerminal && pinnedQuickCommandBar ? quickCommandBoxHeight : 0) + resizeTrigger
-    const l = pinned ? 43 + leftSidebarWidth : 43
+    // 书签面板常驻显示，始终考虑其宽度
+    const l = 43 + leftSidebarWidth
     const r = rightPanelVisible && rightPanelPinned ? rightPanelWidth : 0
     return {
       height: h,
@@ -62,10 +63,10 @@ export default auto(function Layout (props) {
       leftSidebarWidth,
       rightPanelVisible,
       rightPanelPinned,
-      rightPanelWidth,
-      pinned
+      rightPanelWidth
     } = props.store
-    const l = pinned ? leftSidebarWidth : 0
+    // 书签面板常驻显示，始终考虑其宽度
+    const l = leftSidebarWidth
     const r = rightPanelPinned && rightPanelVisible ? rightPanelWidth : 0
     const w = width - l - r - 42
     const h = height - footerHeight - (pinnedQuickCommandBar ? quickCommandBoxHeight : 0)

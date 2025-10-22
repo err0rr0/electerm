@@ -131,18 +131,15 @@ export default auto(function FooterEntry (props) {
     )
   }
 
-  const { leftSidebarWidth, openedSideBar, inActiveTerminal } = props.store
+  const { leftSidebarWidth, inActiveTerminal } = props.store
   const w = 43 + leftSidebarWidth
-  const sideProps = openedSideBar
-    ? {
-        className: 'main-footer',
-        style: {
-          left: `${w}px`
-        }
-      }
-    : {
-        className: 'main-footer'
-      }
+  // 书签面板常驻显示，footer始终考虑侧边栏宽度
+  const sideProps = {
+    className: 'main-footer',
+    style: {
+      left: `${w}px`
+    }
+  }
   if (
     !inActiveTerminal
   ) {
