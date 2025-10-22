@@ -740,7 +740,9 @@ export default class Sftp extends Component {
               )
               this.retryCount++
             } else {
-              throw e
+              // 静默处理SFTP连接失败，不抛出错误
+              console.debug('SFTP connection failed (silently ignored):', e.message)
+              return null
             }
           })
         this.setState(() => {
