@@ -44,8 +44,25 @@ export default function Sidebar (props) {
 
   const { store } = window
 
+  const handleClickOutside = (event) => {
+    // Don't close if pinned or has active input
+    if (store.pinned || hasActiveInput()) {
+      return
+    }
+
+    // Check if click is outside the sidebar panel
+    const sidebarPanel = document.querySelector('.sidebar-panel')
+    if (sidebarPanel && !sidebarPanel.contains(event.target)) {
+      store.setOpenedSideBar('')
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }
+
   const handleClickBookmark = () => {
-    // 书签面板现在常驻显示，这个函数可以用于其他用途或保持为空
+    // 打开右侧书签面板
+    store.rightPanelVisible = true
+    store.rightPanelTab = 'bookmarks'
+    store.rightPanelPinned = true // 默认固定右侧面板
   }
 
   const handleShowUpgrade = () => {
@@ -73,15 +90,18 @@ export default function Sidebar (props) {
   const syncActive = showSetting && settingTab === settingMap.setting && settingItem.id === 'setting-sync'
   const themeActive = showSetting && settingTab === settingMap.terminalThemes
   const bookmarksActive = showSetting && settingTab === settingMap.bookmarks
-  // 书签面板始终显示，不依赖openedSideBar状态
-  const sideProps = {
-    className: 'sidebar-list sidebar-list-always-visible',
-    style: {
-      width: `${leftSidebarWidth}px`
-    }
-  }
+  const sideProps = openedSideBar
+    ? {
+        className: 'sidebar-list',
+        style: {
+          width: `${leftSidebarWidth}px`
+        }
+      }
+    : {
+        className: 'sidebar-list'
+      }
   const sidebarProps = {
-    className: `sidebar type-bookmarks-always`,
+    className: `sidebar type-${openedSideBar}`,
     style: {
       width: sidebarWidth,
       height

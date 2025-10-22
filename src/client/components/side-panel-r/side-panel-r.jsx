@@ -29,6 +29,8 @@ export default memo(function RightSidePanel (
   }
   const tag = rightPanelTab === 'ai'
     ? <Tag className='mg1r'>AI</Tag>
+    : rightPanelTab === 'bookmarks'
+    ? <Tag className='mg1r'>书签</Tag>
     : <InfoCircleOutlined className='mg1r' />
 
   function onDragEnd (nw) {

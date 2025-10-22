@@ -28,6 +28,7 @@ import ConnectionHoppingWarning from './connection-hopping-warnning'
 import SshConfigLoadNotify from '../ssh-config/ssh-config-load-notify'
 import LoadSshConfigs from '../ssh-config/load-ssh-configs'
 import AIChat from '../ai/ai-chat'
+import BookmarkSelect from '../sidebar/bookmark-select'
 import Opacity from '../common/opacity'
 import InputContextMenu from '../common/input-context-menu'
 import { pick } from 'lodash-es'
@@ -291,8 +292,15 @@ export default auto(function Index (props) {
         <Resolutions {...resProps} />
         <InfoModal {...infoModalProps} />
         <RightSidePanel {...rightPanelProps}>
-          <AIChat {...aiChatProps} />
-          <TerminalInfo {...terminalInfoProps} />
+          {rightPanelTab === 'bookmarks' && (
+            <div className='pd2'>
+              <div style={{ height: '100%', overflowY: 'auto' }}>
+                <BookmarkSelect store={store} from='rightPanel' />
+              </div>
+            </div>
+          )}
+          {rightPanelTab === 'ai' && <AIChat {...aiChatProps} />}
+          {rightPanelTab !== 'bookmarks' && rightPanelTab !== 'ai' && <TerminalInfo {...terminalInfoProps} />}
         </RightSidePanel>
         <SshConfigLoadNotify {...sshConfigProps} />
         <LoadSshConfigs

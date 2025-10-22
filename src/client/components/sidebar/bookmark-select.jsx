@@ -9,14 +9,21 @@ export default auto(function BookmarkSelect (props) {
   const { store, from } = props
   const {
     listStyle,
+    openedSideBar,
     leftSidebarWidth,
     expandedKeys,
     bookmarks,
     bookmarksMap
   } = store
-  // 移除 openedSideBar 检查，书签面板现在始终显示
+  // 对于左侧边栏，检查openedSideBar状态；对于右侧面板，始终显示
+  if (from === 'sidebar' && openedSideBar !== 'bookmarks') {
+    return null
+  }
   const onClickItem = (item) => {
-    // 书签面板常驻显示，不再需要关闭侧边栏
+    // 如果来自右侧面板，不需要关闭侧边栏
+    if (from === 'sidebar' && !store.pinned) {
+      store.setOpenedSideBar('')
+    }
     store.onSelectBookmark(item.id)
   }
   const base = {
