@@ -178,7 +178,7 @@ export const maxBatchInput = 30
 export const windowControlWidth = 94
 export const baseUpdateCheckUrls = [
   packInfo.homepage,
-  'https://gitee.com/github-zxdong262/electerm/raw/gh-pages'
+  'https://github.com/err0rr0/electerm/raw/gh-pages'
 ]
 export const syncTypes = buildConst([
   'github',

@@ -4,10 +4,10 @@
   "description": "react components src for electerm",
   "main": "./client/components/main/main.jsx",
   "license": "MIT",
-  "langugeRepo": "https://github.com/electerm/electerm-locales",
+  "langugeRepo": "https://github.com/err0rr0/electerm/electerm-locales",
   "privacyNoticeLink": "https://github.com/electerm/electerm/wiki/privacy-notice",
   "knownIssuesLink": "https://github.com/electerm/electerm/wiki/Know-issues",
-  "sponsorLink": "https://electerm.html5beta.com/sponsor-electerm.html",
+  "sponsorLink": "https://github.com/err0rr0/electerm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/electerm/electerm.git"
@@ -20,8 +20,8 @@
   "bugs": {
     "url": "https://github.com/electerm/electerm/issues"
   },
-  "homepage": "https://electerm.html5beta.com",
-  "releases": "https://github.com/electerm/electerm/releases",
+  "homepage": "https://github.com/err0rr0/electerm",
+  "releases": "https://github.com/err0rr0/electerm/releases",
   "engines": {
     "node": ">=18.0.0"
   },

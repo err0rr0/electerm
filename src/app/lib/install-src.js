@@ -7,7 +7,7 @@ const {
 
 let init = 'not-inited'
 if (isWin) {
-  init = 'win-x64.tar.gz'
+  init = 'win-x64.zip'
 } else if (isMac || isArm) {
   init = 'mac-x64.dmg'
 } else {

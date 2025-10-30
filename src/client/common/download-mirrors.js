@@ -1,6 +1,6 @@
 export default [
   {
     name: 'homepage',
-    url: 'https://electerm.html5beta.com'
+    url: 'https://github.com/err0rr0/electerm'
   }
 ]
