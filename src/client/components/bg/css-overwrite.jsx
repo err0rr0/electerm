@@ -156,7 +156,7 @@ export default class CssOverwrite extends Component {
     const st = await this.createBackgroundStyle(this.props.terminalBackgroundImagePath)
     if (!st) {
       return '#container .session-batch-active .xterm-screen::before {' +
-      'background-image: url("./images/electerm-watermark.png");' +
+      'background-image: none;' +
       '}'
     }
 

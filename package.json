@@ -1,5 +1,5 @@
 {
-  "name": "electerm",
+  "name": "hyterm",
   "version": "2.3.75",
   "description": "Terminal/ssh/telnet/serialport/sftp client(linux, mac, win)",
   "main": "app.js",

@@ -123,7 +123,7 @@ export default auto(function InfoModal (props) {
           <LogoElem />
           <p className='mg2b'>{e('desc')}</p>
           <RunningTime />
-          <p className='mg1b'>
+          {/* <p className='mg1b'>
             <UserOutlined /> <b className='mg1r'>{e('author')} ➾</b>
             <Link to={authorUrl} className='mg1l'>
               {authorName} ({email})
@@ -179,7 +179,7 @@ export default auto(function InfoModal (props) {
           </p>
           <p className='mg1b'>
             <InfoCircleOutlined /> <b className='mg1r'>{window.store.installSrc}</b>
-          </p>
+          </p> */}
           <p className='mg1b'>
             <JavaScriptOutlined /> <b className='mg1r'>Powered by</b>
             <Link to='https://github.com/tylerlong/manate'>
