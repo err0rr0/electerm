@@ -37,7 +37,7 @@ class TerminalLocal extends TerminalBase {
       : platform === 'darwin' ? execMacArgs : execLinuxArgs
     const cwd = process.env[platform === 'win32' ? 'USERPROFILE' : 'HOME']
     const argv = platform.startsWith('darwin') ? ['--login', ...arg] : arg
-    const pty = require('node-pty')
+    const pty = require('./pty-wrapper')
     this.term = pty.spawn(exec, argv, {
       name: term,
       encoding: null,
