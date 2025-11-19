@@ -266,20 +266,9 @@ export default Store => {
   }
 
   Store.prototype.initFirstTab = function (batch) {
-    const { store } = window
-    if (batch !== undefined) {
-      const newTab = newTerm()
-      newTab.batch = batch // Set batch number
-      store.addTab(newTab)
-      return
-    }
-    const { layout } = store
-    const batchCount = splitConfig[layout].children || 1
-    for (let i = 0; i < batchCount; i++) {
-      const newTab = newTerm()
-      newTab.batch = i // Set batch number
-      store.addTab(newTab)
-    }
+    // Do not create any default terminals
+    // Users should manually create terminals as needed
+    return
   }
 
   Store.prototype.updateTab = function (id, update) {
